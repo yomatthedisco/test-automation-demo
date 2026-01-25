@@ -1,0 +1,29 @@
+{
+  "name": "test-automation-demo",
+  "version": "1.0.0",
+  "description": "A simple Playwright test automation demo using TypeScript and Page Object Model pattern",
+  "main": "index.js",
+  "scripts": {
+    "setup": "npm install && npx playwright install --with-deps chromium",
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "test:ui": "playwright test --ui",
+    "report": "playwright show-report"
+  },
+  "keywords": [
+    "playwright",
+    "typescript",
+    "automation",
+    "testing",
+    "page-object-model"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "@types/node": "^20.10.0",
+    "dotenv": "^16.3.1",
+    "typescript": "^5.3.0"
+  }
+}
