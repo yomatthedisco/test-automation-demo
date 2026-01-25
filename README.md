@@ -29,7 +29,9 @@ test-automation-demo/
 │   └── .env.example        # Environment template
 ├── src/
 │   ├── pages/              # Page Object Model classes
-│   │   └── LoginPage.ts    # Login page interactions
+│   │   ├── BasePage.ts     # Base page with common methods
+│   │   ├── LoginPage.ts    # Login page interactions
+│   │   └── DashboardPage.ts # Dashboard page interactions
 │   ├── utils/              # Utility functions
 │   │   ├── timeouts.ts     # Timeout constants
 │   │   └── credentialsHelper.ts  # Credential management
@@ -125,22 +127,48 @@ The Page Object Model is a design pattern that:
 - Reduces code duplication
 - Improves test maintenance
 - Enhances code readability
+- **Separates actions from assertions** (actions in page objects, assertions in tests)
+- **Promotes reusability** with dynamic, minimal methods
 
-### Example: LoginPage Class
+### Example: LoginPage Class (Refactored & Reusable)
 ```typescript
-export class LoginPage {
-  // Locators
+// BasePage - Common methods for all pages
+export class BasePage {
+  readonly page: Page;
+  
+  async goto(url: string) { ... }
+  getElement(selector: string): Locator { ... }
+  async clickElement(selector: string) { ... }
+  async waitForElement(selector: string) { ... }
+  // ... more common methods
+}
+
+// LoginPage extends BasePage
+export class LoginPage extends BasePage {
   readonly usernameInput: Locator;
   readonly passwordInput: Locator;
   
-  // Methods
+  constructor(page: Page) {
+    super(page);  // Inherit all BasePage methods
+    this.usernameInput = page.locator('#user-name');
+    this.passwordInput = page.locator('#password');
+  }
+  
   async login(username: string, password: string) {
-    await this.usernameInput.fill(username);
-    await this.passwordInput.fill(password);
-    await this.submitButton.click();
+    await this.fillUsername(username);
+    await this.fillPassword(password);
+    await this.clickSubmit();
   }
 }
 ```
+
+### Key Principles Applied:
+- ✅ **Inheritance**: All page objects extend BasePage
+- ✅ **DRY Principle**: Common methods defined once in BasePage
+- ✅ **Single Responsibility**: Each page object handles one page
+- ✅ **No Assertions**: Page objects perform actions, tests do assertions
+- ✅ **Dynamic Methods**: Reusable getters for flexible element access
+- ✅ **Minimal Code**: Only essential methods, no redundancy
 
 ## 🔧 Configuration
 
@@ -186,16 +214,22 @@ import { testUser } from '@data/testData';
 - Strict mode enabled
 - Better IDE autocomplete and error detection
 
-## 🎓 Learning Points
+## 🎓 Learning Resources
+
+This project demonstrates best practices in test automation. For in-depth learning:
+
+- 📖 **[BEST_PRACTICES.md](BEST_PRACTICES.md)** - Comprehensive guide to test automation framework design
+- 🎯 **[OOP_CONCEPTS.md](OOP_CONCEPTS.md)** - Object-Oriented Programming principles with real examples from this framework
+
+### Quick Overview
 
 This project demonstrates:
-- ✅ Page Object Model implementation
-- ✅ TypeScript with Playwright
-- ✅ Environment variable management
-- ✅ Test organization with test.step()
-- ✅ Centralized test data management
-- ✅ Reusable utility functions
-- ✅ Proper project structure
+- ✅ **Page Object Model** - Reusable page classes with inheritance (BasePage)
+- ✅ **TypeScript** - Type-safe test development
+- ✅ **AAA Pattern** - Arrange-Act-Assert test structure
+- ✅ **Environment Config** - Multiple environment support
+- ✅ **Dynamic & Minimal Code** - Powerful yet simple design
+- ✅ **SOLID Principles** - Professional OOP design
 
 ## 🔍 Troubleshooting
 

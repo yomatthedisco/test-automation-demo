@@ -1,27 +1,27 @@
 import { test, expect, Page } from '@playwright/test';
 import { LoginPage } from '@pages/LoginPage';
-import { testUser } from '@data/testData';
+import { DashboardPage } from '@pages/DashboardPage';
+import { testUser, URLS, EXPECTED_TEXT } from '@data/testData';
+import { ELEMENT_WAIT } from '@utils/timeouts';
 
 /**
  * Login Test Suite
  * 
- * This test suite validates the login functionality using the Page Object Model pattern.
- * It includes setup, teardown, and organized test steps for better readability.
+ * Validates login functionality using Page Object Model pattern.
+ * Follows AAA (Arrange-Act-Assert) pattern with assertions in tests.
  */
 
 test.describe('Login Functionality', () => {
   let loginPage: LoginPage;
+  let dashboardPage: DashboardPage;
 
   /**
-   * Before Each Test
-   * Setup that runs before each test case
+   * Before Each Test - Setup
    */
   test.beforeEach(async ({ page }: { page: Page }) => {
-    // Initialize the LoginPage object
     loginPage = new LoginPage(page);
-    
-    // Navigate to the login page
-    await loginPage.navigate();
+    dashboardPage = new DashboardPage(page);
+    await loginPage.goto(URLS.LOGIN_PAGE);
   });
 
   /**
@@ -33,7 +33,7 @@ test.describe('Login Functionality', () => {
    * - Assert: Verify the expected outcomes
    */
   test('should successfully login, verify dashboard, and logout', async () => {
-    // ARRANGE - Prepare test data and preconditions
+    // ARRANGE - Prepare test data
     let username: string;
     let password: string;
 
@@ -43,45 +43,38 @@ test.describe('Login Functionality', () => {
       password = credentials.password;
     });
 
-    // ACT - Perform login action
+    // ACT - Perform login
     await test.step('Act - Login with valid credentials', async () => {
       await loginPage.login(username, password);
     });
 
     // ASSERT - Verify successful login and dashboard access
     await test.step('Assert - Verify successful login and dashboard access', async () => {
-      await loginPage.verifySuccessfulLogin();
+      // Verify URL
+      await expect(loginPage.page).toHaveURL(new RegExp(URLS.DASHBOARD));
+      
+      // Verify dashboard elements
+      await expect(dashboardPage.title).toBeVisible({ timeout: ELEMENT_WAIT });
+      await expect(dashboardPage.title).toHaveText(EXPECTED_TEXT.DASHBOARD_TITLE);
+      await expect(dashboardPage.appLogo).toBeVisible();
+      await expect(dashboardPage.appLogo).toContainText(EXPECTED_TEXT.DASHBOARD_MESSAGE);
+      await expect(dashboardPage.hamburgerMenu).toBeVisible();
     });
 
-    // ACT - Perform logout action
+    // ACT - Perform logout
     await test.step('Act - Logout from the application', async () => {
-      await loginPage.logout();
+      await dashboardPage.logout();
     });
 
     // ASSERT - Verify successful logout
     await test.step('Assert - Verify successful logout and return to login page', async () => {
-      await loginPage.verifySuccessfulLogout();
-    });
-  });
-
-  /**
-   * Alternative: Using the complete flow method
-   * 
-   * This is a more concise version that uses the completeLoginLogoutFlow method
-   * from the LoginPage class. Uncomment to use this approach instead.
-   */
-  /*
-  test('should complete full login-logout flow using helper method', async () => {
-    const { username, password } = testUser.credentials;
-    
-    await test.step('Execute complete login-logout flow', async () => {
-      const result = await loginPage.completeLoginLogoutFlow(username, password);
+      // Verify URL is back to login page
+      await expect(loginPage.page).toHaveURL(new RegExp(URLS.LOGIN_PAGE));
       
-      // Verify all steps were successful
-      expect(result.login).toBe(true);
-      expect(result.postLogin).toBe(true);
-      expect(result.logout).toBe(true);
+      // Verify login form is visible
+      await expect(loginPage.usernameInput).toBeVisible({ timeout: ELEMENT_WAIT });
+      await expect(loginPage.passwordInput).toBeVisible();
+      await expect(loginPage.submitButton).toBeVisible();
     });
   });
-  */
 });
