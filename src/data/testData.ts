@@ -6,15 +6,26 @@
  */
 
 import { getTestCredentials } from '@utils/credentialsHelper';
+import { USERS, User } from '@data/testUsers';
 
 /**
  * Test User Credentials
  * Loaded from environment variables via credentialsHelper
  */
 export const testUser = {
-  get credentials() {
-    return getTestCredentials();
-  },
+  // get credentials() {
+  //   return getTestCredentials();
+  // },
+
+  // get credentials(): User {
+  //   return USERS[0];
+  // }
+
+
+
+  get allUsers(): User[] {
+    return USERS;
+  }
 };
 
 /**

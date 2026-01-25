@@ -32,49 +32,46 @@ test.describe('Login Functionality', () => {
    * - Act: Execute the login and logout actions
    * - Assert: Verify the expected outcomes
    */
-  test('should successfully login, verify dashboard, and logout', async () => {
-    // ARRANGE - Prepare test data
-    let username: string;
-    let password: string;
 
-    await test.step('Arrange - Get test credentials', async () => {
-      const credentials = testUser.credentials;
-      username = credentials.username;
-      password = credentials.password;
-    });
+  for (const user of testUser.allUsers) {
+    test(`should successfully login, verify dashboard, and logout: ${user.username}`, async () => {
+      await test.step('Arrange - Get test credentials', async () => {
+        const { username, password } = user;
+      });
 
-    // ACT - Perform login
-    await test.step('Act - Login with valid credentials', async () => {
-      await loginPage.login(username, password);
-    });
+      // ACT - Perform login
+      await test.step('Act - Login with valid credentials', async () => {
+        await loginPage.login(user.username, user.password);
+      });
 
-    // ASSERT - Verify successful login and dashboard access
-    await test.step('Assert - Verify successful login and dashboard access', async () => {
-      // Verify URL
-      await expect(loginPage.page).toHaveURL(new RegExp(URLS.DASHBOARD));
-      
-      // Verify dashboard elements
-      await expect(dashboardPage.title).toBeVisible({ timeout: ELEMENT_WAIT });
-      await expect(dashboardPage.title).toHaveText(EXPECTED_TEXT.DASHBOARD_TITLE);
-      await expect(dashboardPage.appLogo).toBeVisible();
-      await expect(dashboardPage.appLogo).toContainText(EXPECTED_TEXT.DASHBOARD_MESSAGE);
-      await expect(dashboardPage.hamburgerMenu).toBeVisible();
-    });
+      // ASSERT - Verify successful login and dashboard access
+      await test.step('Assert - Verify successful login and dashboard access', async () => {
+        // Verify URL
+        await expect(loginPage.page).toHaveURL(new RegExp(URLS.DASHBOARD));
 
-    // ACT - Perform logout
-    await test.step('Act - Logout from the application', async () => {
-      await dashboardPage.logout();
-    });
+        // Verify dashboard elements
+        await expect(dashboardPage.title).toBeVisible({ timeout: ELEMENT_WAIT });
+        await expect(dashboardPage.title).toHaveText(EXPECTED_TEXT.DASHBOARD_TITLE);
+        await expect(dashboardPage.appLogo).toBeVisible();
+        await expect(dashboardPage.appLogo).toContainText(EXPECTED_TEXT.DASHBOARD_MESSAGE);
+        await expect(dashboardPage.hamburgerMenu).toBeVisible();
+      });
 
-    // ASSERT - Verify successful logout
-    await test.step('Assert - Verify successful logout and return to login page', async () => {
-      // Verify URL is back to login page
-      await expect(loginPage.page).toHaveURL(new RegExp(URLS.LOGIN_PAGE));
-      
-      // Verify login form is visible
-      await expect(loginPage.usernameInput).toBeVisible({ timeout: ELEMENT_WAIT });
-      await expect(loginPage.passwordInput).toBeVisible();
-      await expect(loginPage.submitButton).toBeVisible();
+      // ACT - Perform logout
+      await test.step('Act - Logout from the application', async () => {
+        await dashboardPage.logout();
+      });
+
+      // ASSERT - Verify successful logout
+      await test.step('Assert - Verify successful logout and return to login page', async () => {
+        // Verify URL is back to login page
+        await expect(loginPage.page).toHaveURL(new RegExp(URLS.LOGIN_PAGE));
+
+        // Verify login form is visible
+        await expect(loginPage.usernameInput).toBeVisible({ timeout: ELEMENT_WAIT });
+        await expect(loginPage.passwordInput).toBeVisible();
+        await expect(loginPage.submitButton).toBeVisible();
+      });
     });
-  });
+  }
 });
