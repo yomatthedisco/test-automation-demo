@@ -21,8 +21,7 @@ export const testUser = {
   //   return USERS[0];
   // }
 
-
-
+  // Getter for all test users (returns the shared USERS array)
   get allUsers(): User[] {
     return USERS;
   }
