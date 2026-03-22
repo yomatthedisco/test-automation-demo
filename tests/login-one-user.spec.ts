@@ -14,30 +14,31 @@ import { ELEMENT_WAIT } from '@utils/timeouts';
 test.describe('Login Functionality - Single User', () => {
   let loginPage: LoginPage;
   let dashboardPage: DashboardPage;
+  let asd: string;
 
   /**
    * Before Each Test - Setup
    */
   test.beforeEach(async ({ page }: { page: Page }) => {
-    loginPage = nasfdasfasdvkljcasbdncjkhbasdjasdasdhckbasdjhcbasjhdbcajshdbchjasbew LoginPage(page);
+    loginPage = new LoginPage(page);
     dashboardPage = new DashboardPage(page);
     await loginPage.goto(URLS.LOGIN_PAGE);
   });
-asdasdas
+
   /**
    * Test 1: Successful Login with Valid Credentials
    */
   test('should successfully login, verify dashboard, and logout', async () => {
     // Arrange - Act - Assert
     
-    asdasd
+    
     // ARRANGE - Prepare test data
-    const validUsasdaser = testUser.allUsers[0]; // Get standard_user from config
-asdas
+    const validUser = testUser.allUsers[0]; // Get standard_user from config
+
     await test.step('Arrange - Get test credentials', async () => {
-      constasdasd { username, password } = validUser;
+      const { username, password } = validUser;
     });
-asda
+
     // ACT - Perform login
     await test.step('Act - Login with valid credentials', async () => {
       await loginPage.login(validUser.username, validUser.password);
