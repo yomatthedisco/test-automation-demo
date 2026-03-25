@@ -16,6 +16,11 @@ export class DashboardPage extends BasePage {
   readonly appLogo: Locator;
   readonly hamburgerMenu: Locator;
   readonly logoutLink: Locator;
+  readonly inventoryItems: Locator;
+  readonly cart: Locator
+  readonly cartBadge: Locator;  
+  readonly sortDropdown: Locator;
+
 
   /**
    * Constructor - Initialize the DashboardPage
@@ -23,10 +28,16 @@ export class DashboardPage extends BasePage {
    */
   constructor(page: Page) {
     super(page);
-    this.title = page.locator('.title');
+    // this.title = page.locator('.title');
+    this.title = page.getByText('Products');
     this.appLogo = page.locator('.app_logo');
     this.hamburgerMenu = page.locator('#react-burger-menu-btn');
     this.logoutLink = page.locator('#logout_sidebar_link');
+    this.inventoryItems = page.locator('.inventory_item');
+    this.cart = page.locator('[data-test="shopping-cart-link"]');
+    this.cartBadge = page.locator('.shopping_cart_badge');
+    this.sortDropdown = page.locator('[data-test="product-sort-container"]');
+
   }
 
   /**
@@ -36,6 +47,13 @@ export class DashboardPage extends BasePage {
     await this.hamburgerMenu.click();
     await this.logoutLink.waitFor({ state: 'visible', timeout: ELEMENT_WAIT });
   }
+
+
+
+  //**
+  // loop to count inventory product */
+  async countProduct(): Promise<void> {
+    };
 
   /**
    * Logout from dashboard
@@ -52,4 +70,6 @@ export class DashboardPage extends BasePage {
   async isOnDashboard(): Promise<boolean> {
     return this.urlContains('/inventory');
   }
+
+
 }
