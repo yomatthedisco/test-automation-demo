@@ -50,10 +50,7 @@ export class DashboardPage extends BasePage {
 
 
 
-  //**
-  // loop to count inventory product */
-  async countProduct(): Promise<void> {
-    };
+  
 
   /**
    * Logout from dashboard
