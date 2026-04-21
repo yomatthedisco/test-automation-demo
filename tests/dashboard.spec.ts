@@ -2,6 +2,7 @@ import {Page, test, expect} from '@playwright/test';
 import { EXPECTED_TEXT, testUser, URLS } from '../src/data/testData';
 import { LoginPage } from '@pages/LoginPage';
 import { DashboardPage } from '../src/pages/DashboardPage';
+import { SortHelper } from '@utils/sortHelper';
 
 
 /**
@@ -15,6 +16,7 @@ import { DashboardPage } from '../src/pages/DashboardPage';
 test.describe('Dashboard Functionality', () =>{
     let loginPage: LoginPage;
     let dashboardpage: DashboardPage;
+    let sortHelper: SortHelper; 
 
     /**
      * Before each test setup
@@ -23,6 +25,7 @@ test.describe('Dashboard Functionality', () =>{
     test.beforeEach(async ({page}: {page:Page}) =>{
         loginPage = new LoginPage(page);
         dashboardpage =new DashboardPage(page);
+        sortHelper = new SortHelper();
         await loginPage.goto(URLS.LOGIN_PAGE);
 
         /**
@@ -54,6 +57,46 @@ test.describe('Dashboard Functionality', () =>{
         });
 
     });
+
+
+    test('Sort Products by Name (A-Z)', async() => {
+        await test.step('Verify alphabetical ascending sort.', async() =>{
+            await dashboardpage.sortDropdown.selectOption('az');
+           await sortHelper.verifySort(dashboardpage.inventoryItems, 'string', 'asc');
+        });
+
+    });
+
+
+    test('Sort Products by Name (Z-A)', async() => {
+        await test.step('Verify alphabetical descending sort.', async() =>{
+            await dashboardpage.sortDropdown.selectOption('za');
+           await sortHelper.verifySort(dashboardpage.inventoryItems, 'string', 'desc');
+        });
+
+    });
+
+
+    test('Sort Products by Price (Low to High)', async() => {
+        await test.step('Verify price ascending sort.', async() =>{
+            await dashboardpage.sortdropdownSelect('lohi');
+           await sortHelper.verifySort(dashboardpage.inventoryItems, 'number', 'asc');
+        });
+
+    });
+
+
+    test('Sort Products by Price (High to Low)', async() => {
+        await test.step('Verify price descending sort.', async() =>{
+            await dashboardpage.sortdropdownSelect('hilo');
+           await sortHelper.verifySort(dashboardpage.inventoryItems, 'number', 'desc');
+        });
+
+    });
+
+
+
+
 
 
 

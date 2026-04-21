@@ -49,7 +49,9 @@ export class DashboardPage extends BasePage {
   }
 
 
-
+  async sortdropdownSelect(option: 'az' | 'za' | 'lohi' | 'hilo') {
+    await this.sortDropdown.selectOption(option);
+  }
   
 
   /**
