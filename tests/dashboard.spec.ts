@@ -29,7 +29,7 @@ test.describe('Dashboard Functionality', () =>{
         await loginPage.goto(URLS.LOGIN_PAGE);
 
         /**
-         * pre condtions Login to dashboard using 'standard_user 
+         * Arange - Login to dashboard using 'standard_user 
          * every ach test
          */
 
@@ -58,7 +58,8 @@ test.describe('Dashboard Functionality', () =>{
 
     });
 
-
+    //**Test case TC-0010
+    // Inventory / Sorting */
     test('Sort Products by Name (A-Z)', async() => {
         await test.step('Verify alphabetical ascending sort.', async() =>{
             await dashboardpage.sortDropdown.selectOption('az');
@@ -67,7 +68,8 @@ test.describe('Dashboard Functionality', () =>{
 
     });
 
-
+    //**Test case TC-0011
+    // Inventory / Sorting    */
     test('Sort Products by Name (Z-A)', async() => {
         await test.step('Verify alphabetical descending sort.', async() =>{
             await dashboardpage.sortDropdown.selectOption('za');
@@ -76,7 +78,8 @@ test.describe('Dashboard Functionality', () =>{
 
     });
 
-
+    //**Test case TC-0012
+    // Inventory / Sorting    */
     test('Sort Products by Price (Low to High)', async() => {
         await test.step('Verify price ascending sort.', async() =>{
             await dashboardpage.sortdropdownSelect('lohi');
@@ -84,8 +87,9 @@ test.describe('Dashboard Functionality', () =>{
         });
 
     });
-
-
+   
+    //**Test case TC-0013
+    // Inventory / Sorting    */
     test('Sort Products by Price (High to Low)', async() => {
         await test.step('Verify price descending sort.', async() =>{
             await dashboardpage.sortdropdownSelect('hilo');
