@@ -64,12 +64,18 @@ test.describe('Dashboard Functionality', () =>{
      */
     test('Add Single Product to Cart', async() => {
         await test.step('Verify adding one product updates UI and cart..', async() =>{
+            /**
+             * Automation NOTE: Badge may hide when 0; check visibility before/after
+             * Use expect before/after to validate badge visibility
+             */
+            expect (await dashboardpage.cartBadge).toBeVisible();
             expect (await dashboardpage.cartBadge.count()).toBe(0);   
             await dashboardpage.addProductToCart(0);
             await expect(dashboardpage.cartBadge).toHaveText('1');
             await dashboardpage.cart.click();
             await expect(dashboardpage.page).toHaveURL(new RegExp(URLS.CART));
             await expect(dashboardpage.cartItemName).toHaveText('Sauce Labs Backpack');
+            expect (await dashboardpage.cartBadge).toBeVisible();
         });
     }); 
     /**Test case TC-0010
