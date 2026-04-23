@@ -58,6 +58,16 @@ test.describe('Dashboard Functionality', () =>{
 
     });
 
+    test('Add Single Product to Cart', async() => {
+        await test.step('Verify adding one product updates UI and cart..', async() =>{
+            expect (await dashboardpage.cartBadge.count()).toBe(0);   
+            await dashboardpage.addProductToCart(0);
+            await expect(dashboardpage.cartBadge).toHaveText('1');
+            await dashboardpage.cart.click();
+            await expect(dashboardpage.page).toHaveURL(new RegExp(URLS.CART));
+            
+        });
+    }); 
     //**Test case TC-0010
     // Inventory / Sorting */
     test('Sort Products by Name (A-Z)', async() => {
