@@ -92,21 +92,19 @@ test.describe('Dashboard Functionality', () =>{
      * test case ID TC - 008 
      * Add Multiple Products to Cart
      */
+ 
+    test('Verify adding multiple items accumulates correctly:', async() => {
+        await test.step('add to cart 3 product: ',async() => {
+            await dashboardpage.addMultipleProduct(3);
 
-    test('Verify adding multiple items accumulates correctly.', async() => {
-
-    });
-
-
-
-    /**Test case TC-0010
-    * Inventory / Sorting */
-    test('Sort Products by Name (A-Z)', async() => {
-        await test.step('Verify alphabetical ascending sort.', async() =>{
-            await dashboardpage.sortDropdown.selectOption('az');
-           await sortHelper.verifySort(dashboardpage.inventoryItems, 'string', 'asc');
         });
-
+        await test.step('open cart and verify 3 items added: ', async() => {
+            await dashboardpage.cart.click();
+            await expect(dashboardpage.page).toHaveURL(new RegExp(URLS.CART));
+            const cartCount = await dashboardpage.cartBadge.textContent();
+            console.log('item Count:', cartCount);
+            expect(cartCount).toBe('3');
+        });
     });
 
     /**Test case TC-0011

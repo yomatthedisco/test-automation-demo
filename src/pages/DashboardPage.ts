@@ -55,11 +55,16 @@ export class DashboardPage extends BasePage {
 /**
  * add single product to cart by index
  */
-  async addProductToCart(inbdex:number){
-    const addbutton = this.button.nth(inbdex);
-    await expect(addbutton).toHaveText('Add to cart');
-    await addbutton.click();
-    await expect(addbutton).toHaveText('Remove');
+  async addProductToCart(index:number){
+    const button = this.button.nth(index);
+
+    //verify initial text add to cart
+    await expect(button).toHaveText('Add to cart');
+
+    await button.click();
+
+    //verify initial text remove
+    await expect(button).toHaveText('Remove');
 
   }
 
@@ -68,8 +73,9 @@ export class DashboardPage extends BasePage {
   */
   async addMultipleProduct(count:number) {
     for (let i = 0; i < count; i++){
-      await this.addProductToCart(i);
-  }
+        await this.addProductToCart(i);
+        await this.waitForNavigation('networkidle');
+    }
 }
 
   async sortdropdownSelect(option: 'az' | 'za' | 'lohi' | 'hilo') {
