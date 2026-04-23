@@ -1,4 +1,4 @@
-import { Page, Locator } from '@playwright/test';
+import { Page, Locator, expect } from '@playwright/test';
 import { BasePage } from './BasePage';
 import { ELEMENT_WAIT } from '@utils/timeouts';
 
@@ -20,6 +20,7 @@ export class DashboardPage extends BasePage {
   readonly cart: Locator
   readonly cartBadge: Locator;  
   readonly sortDropdown: Locator;
+  readonly button: Locator;
 
 
   /**
@@ -37,7 +38,7 @@ export class DashboardPage extends BasePage {
     this.cart = page.locator('[data-test="shopping-cart-link"]');
     this.cartBadge = page.locator('.shopping_cart_badge');
     this.sortDropdown = page.locator('[data-test="product-sort-container"]');
-
+    this.button = page.locator('.btn_inventory');
   }
 
   /**
@@ -48,6 +49,26 @@ export class DashboardPage extends BasePage {
     await this.logoutLink.waitFor({ state: 'visible', timeout: ELEMENT_WAIT });
   }
 
+
+/**
+ * add single product to cart by index
+ */
+  async addProductToCart(inbdex:number){
+    const addbutton = this.button.nth(inbdex);
+    await expect(addbutton).toHaveText('Add to cart');
+    await addbutton.click();
+    await expect(addbutton).toHaveText('Remove');
+
+  }
+
+
+  /** add Multiple product to cart 
+  */
+  async addMultipleProduct(count:number) {
+    for (let i = 0; i < count; i++){
+      await this.addProductToCart(i);
+  }
+}
 
   async sortdropdownSelect(option: 'az' | 'za' | 'lohi' | 'hilo') {
     await this.sortDropdown.selectOption(option);
