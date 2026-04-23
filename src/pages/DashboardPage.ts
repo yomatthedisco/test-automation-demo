@@ -21,6 +21,7 @@ export class DashboardPage extends BasePage {
   readonly cartBadge: Locator;  
   readonly sortDropdown: Locator;
   readonly button: Locator;
+  readonly cartItemName: Locator;
 
 
   /**
@@ -39,6 +40,7 @@ export class DashboardPage extends BasePage {
     this.cartBadge = page.locator('.shopping_cart_badge');
     this.sortDropdown = page.locator('[data-test="product-sort-container"]');
     this.button = page.locator('.btn_inventory');
+    this.cartItemName = page.locator('.inventory_item_name');
   }
 
   /**

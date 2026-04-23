@@ -58,6 +58,10 @@ test.describe('Dashboard Functionality', () =>{
 
     });
 
+    /**
+     * test case TC-007 - validate adding single product to cart
+     *  and cart badge update
+     */
     test('Add Single Product to Cart', async() => {
         await test.step('Verify adding one product updates UI and cart..', async() =>{
             expect (await dashboardpage.cartBadge.count()).toBe(0);   
@@ -65,11 +69,11 @@ test.describe('Dashboard Functionality', () =>{
             await expect(dashboardpage.cartBadge).toHaveText('1');
             await dashboardpage.cart.click();
             await expect(dashboardpage.page).toHaveURL(new RegExp(URLS.CART));
-            
+            await expect(dashboardpage.cartItemName).toHaveText('Sauce Labs Backpack');
         });
     }); 
-    //**Test case TC-0010
-    // Inventory / Sorting */
+    /**Test case TC-0010
+    * Inventory / Sorting */
     test('Sort Products by Name (A-Z)', async() => {
         await test.step('Verify alphabetical ascending sort.', async() =>{
             await dashboardpage.sortDropdown.selectOption('az');
@@ -78,8 +82,8 @@ test.describe('Dashboard Functionality', () =>{
 
     });
 
-    //**Test case TC-0011
-    // Inventory / Sorting    */
+    /**Test case TC-0011
+    * Inventory / Sorting    */
     test('Sort Products by Name (Z-A)', async() => {
         await test.step('Verify alphabetical descending sort.', async() =>{
             await dashboardpage.sortDropdown.selectOption('za');
@@ -88,8 +92,8 @@ test.describe('Dashboard Functionality', () =>{
 
     });
 
-    //**Test case TC-0012
-    // Inventory / Sorting    */
+    /**Test case TC-0012
+    * Inventory / Sorting    */
     test('Sort Products by Price (Low to High)', async() => {
         await test.step('Verify price ascending sort.', async() =>{
             await dashboardpage.sortdropdownSelect('lohi');
@@ -98,8 +102,8 @@ test.describe('Dashboard Functionality', () =>{
 
     });
    
-    //**Test case TC-0013
-    // Inventory / Sorting    */
+    /**Test case TC-0013
+     * Inventory / Sorting    */
     test('Sort Products by Price (High to Low)', async() => {
         await test.step('Verify price descending sort.', async() =>{
             await dashboardpage.sortdropdownSelect('hilo');
