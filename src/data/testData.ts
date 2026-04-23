@@ -34,6 +34,7 @@ export const testUser = {
 export const URLS = {
   LOGIN_PAGE: '/',
   DASHBOARD: '/inventory.html',
+  CART: '/cart.html',
 } as const;
 
 /**
