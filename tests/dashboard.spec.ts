@@ -62,22 +62,43 @@ test.describe('Dashboard Functionality', () =>{
      * test case TC-007 - validate adding single product to cart
      *  and cart badge update
      */
-    test('Add Single Product to Cart', async() => {
-        await test.step('Verify adding one product updates UI and cart..', async() =>{
-            /**
+    test('Verify adding single product updates UI and cart', async() => {
+         /**
              * Automation NOTE: Badge may hide when 0; check visibility before/after
              * Use expect before/after to validate badge visibility
              */
+        await test.step('Confirm cart badge is not visible or is 0', async() =>{
             expect (await dashboardpage.cartBadge).toBeVisible();
             expect (await dashboardpage.cartBadge.count()).toBe(0);   
             await dashboardpage.addProductToCart(0);
+            
+        });
+        await test.step(" Click Add to cart for Sauce Labs Backpack", async() => {
             await expect(dashboardpage.cartBadge).toHaveText('1');
+        });
+
+        await test.step('Click cart icon to open cart', async() => {
             await dashboardpage.cart.click();
             await expect(dashboardpage.page).toHaveURL(new RegExp(URLS.CART));
             await expect(dashboardpage.cartItemName).toHaveText('Sauce Labs Backpack');
             expect (await dashboardpage.cartBadge).toBeVisible();
         });
+
+
     }); 
+
+
+    /**
+     * test case ID TC - 008 
+     * Add Multiple Products to Cart
+     */
+
+    test('Verify adding multiple items accumulates correctly.', async() => {
+
+    });
+
+
+
     /**Test case TC-0010
     * Inventory / Sorting */
     test('Sort Products by Name (A-Z)', async() => {
