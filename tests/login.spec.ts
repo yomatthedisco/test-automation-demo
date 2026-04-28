@@ -44,6 +44,11 @@ test.describe('Login Functionality', () => {
         await loginPage.login(user.username, user.password);
       });
 
+           if(user.username === 'locked_out_user') {
+        await loginPage.expectLockedOuterror();
+        return; // exit the test if username is locked out
+      }
+
       // ASSERT - Verify successful login and dashboard access
       await test.step('Assert - Verify successful login and dashboard access', async () => {
         // Verify URL
