@@ -1,4 +1,5 @@
-import { test, expect, Page } from '@playwright/test';
+// import { test, expect, Page } from '@playwright/test';
+import { test, expect} from '@fixtures/login.fixture';
 import { LoginPage } from '@pages/LoginPage';
 import { DashboardPage } from '@pages/DashboardPage';
 import { testUser, URLS, EXPECTED_TEXT } from '@data/testData';
@@ -12,17 +13,19 @@ import { ELEMENT_WAIT } from '@utils/timeouts';
  */
 
 test.describe('Login Functionality', () => {
-  let loginPage: LoginPage;
-  let dashboardPage: DashboardPage;
+  
+  
+  // let loginPage: LoginPage;
+  // let dashboardPage: DashboardPage;
 
-  /**
-   * Before Each Test - Setup
-   */
-  test.beforeEach(async ({ page }: { page: Page }) => {
-    loginPage = new LoginPage(page);
-    dashboardPage = new DashboardPage(page);
-    await loginPage.goto(URLS.LOGIN_PAGE);
-  });
+  // /**
+  //  * Before Each Test - Setup
+  //  */
+  // test.beforeEach(async ({ page }: { page: Page }) => {
+  //   loginPage = new LoginPage(page);
+  //   dashboardPage = new DashboardPage(page);
+  //   await loginPage.goto(URLS.LOGIN_PAGE);
+  // });
 
   /**
    * Test: Successful Login, Dashboard Verification, and Logout
@@ -34,7 +37,7 @@ test.describe('Login Functionality', () => {
    */
 
   for (const user of testUser.allUsers) {
-    test(`should successfully login, verify dashboard, and logout: ${user.username}`, async () => {
+    test(`should successfully login, verify dashboard, and logout: ${user.username}`, async ({loginPage, dashboardPage}) => {
       await test.step('Arrange - Get test credentials', async () => {
         const { username, password } = user;
       });
