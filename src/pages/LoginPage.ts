@@ -1,5 +1,6 @@
-import { Page, Locator } from '@playwright/test';
+import { Page, Locator, expect } from '@playwright/test';
 import { BasePage } from './BasePage';
+import { ELEMENT_WAIT } from '@utils/timeouts';
 
 /**
  * LoginPage - Page Object Model
@@ -62,4 +63,10 @@ export class LoginPage extends BasePage {
     await this.clickSubmit();
     await this.waitForNavigation('networkidle');
   }
+
+  async expectLockedOuterror(): Promise<void>{
+    await expect(this.errorMessage).toBeVisible({timeout: ELEMENT_WAIT});
+    await expect(this.errorMessage).toContainText('Sorry, this user has been locked out.');
+};
+
 }
