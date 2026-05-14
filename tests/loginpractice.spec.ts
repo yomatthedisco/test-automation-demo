@@ -723,4 +723,11 @@ test('View All Products', async ({page}: {page:Page}) => {
 
           });
 
+             test('Checkout with Empty Last Name', async ({page}: {page:Page}) => {  
+
+
+
+          });
+
+
 });
