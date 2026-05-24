@@ -833,9 +833,9 @@ test('View All Products', async ({page}: {page:Page}) => {
         console.log('Calculated Total Item :', calculatedItemTotal);
 
 
-
         });
 
+        // sample commit
  
 
 });
