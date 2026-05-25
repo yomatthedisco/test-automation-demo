@@ -197,13 +197,9 @@ test('View All Products', async ({page}: {page:Page}) => {
 
         await page.waitForLoadState('networkidle');
 
-        // Click 'Add to cart' for 'Sauce Labs Backpack'
+        // Adding multiple item
         await page.locator('xpath=//*[@id="add-to-cart-sauce-labs-backpack"]').click();
-
-        // Click 'Add to cart' for 'Sauce Labs Bike Light'
         await page.locator('xpath=//*[@id="add-to-cart-sauce-labs-bike-light"]').click();
-
-        // Click 'Add to cart' for 'Sauce Labs Bolt T-Shirt'
         await page.locator('xpath=//*[@id="add-to-cart-sauce-labs-bolt-t-shirt"]').click();
 
         // Cart badge shows '3'
@@ -713,21 +709,133 @@ test('View All Products', async ({page}: {page:Page}) => {
         // Verify error message
         await expect(page.locator('[data-test="error"]')).toHaveText('Error: Last Name is required');
 
+        });
+
+
+    test('Checkout with Empty Postal Code', async ({page}: {page:Page}) => {  
+    
+
+        // Navigate to https://www.saucedemo.com/ and  Login with valid credentials
+        await page.goto('https://www.saucedemo.com/'); 
+    
+        await page.locator('xpath=//*[@id="user-name"]').fill('standard_user');
+
+        await page.locator('xpath=//*[@id="password"]').fill('secret_sauce');
+
+        await page.locator('xpath=//*[@id="login-button"]').click();
+
+        await page.waitForLoadState('networkidle') 
+
+
+        // select an item
+        await page.locator('xpath=//*[@id="add-to-cart-sauce-labs-backpack"]').click();
+        await page.locator('xpath=//*[@id="add-to-cart-sauce-labs-bike-light"]').click();
+        await page.locator('xpath=//*[@id="add-to-cart-sauce-labs-bolt-t-shirt"]').click();
+
+        // Click on cart icon
+        await page.locator('.shopping_cart_link').click();
+
+        // Click check out 
+        await page.locator('xpath=//*[@id="checkout"]').click();
+
+        // Enter checkout information
+        await page.locator('[data-test="firstName"]').fill('John');
+        await page.locator('[data-test="lastName"]').fill('Doe');
+        await page.locator('[data-test="postalCode"]').fill('');
+
+        // Click Continue
+        await page.locator('[data-test="continue"]').click();
+
+        // Verify error message
+        await expect(page.locator('[data-test="error"]')).toHaveText('Error: Postal Code is required');
+
        });
 
+       
+    test('Cancel Checkout', async ({page}: {page:Page}) => {  
+    
+        // Navigate to https://www.saucedemo.com/ and  Login with valid credentials
+        await page.goto('https://www.saucedemo.com/'); 
+    
+        await page.locator('xpath=//*[@id="user-name"]').fill('standard_user');
+
+        await page.locator('xpath=//*[@id="password"]').fill('secret_sauce');
+
+        await page.locator('xpath=//*[@id="login-button"]').click();
+
+        await page.waitForLoadState('networkidle') 
+
+        // select an item
+        await page.locator('xpath=//*[@id="add-to-cart-sauce-labs-backpack"]').click();
+        await page.locator('xpath=//*[@id="add-to-cart-sauce-labs-bike-light"]').click();
+        await page.locator('xpath=//*[@id="add-to-cart-sauce-labs-bolt-t-shirt"]').click();
+
+        // Click on cart icon
+        await page.locator('.shopping_cart_link').click();
+
+        // Click check out 
+        await page.locator('xpath=//*[@id="checkout"]').click();
+
+        // Click cancel
+        await page.locator('xpath=//*[@id="cancel"]').click();
+
+         // Assert user is redirected to inventory page
+        const currentURL = page.url();
+        console.log('Current URL:', currentURL);
+
+         // Assert item remain in cart
+        const cartList = await page.locator('.cart_item').count();
+        console.log('Cart item count:', cartList);
         
-        
-    test('Checkout with Empty Last Name', async ({page}: {page:Page}) => {  
+    });
+
+    test('Verify Checkout Overview', async ({page}: {page:Page}) => { 
+            
+        // Navigate to https://www.saucedemo.com/ and  Login with valid credentials
+        await page.goto('https://www.saucedemo.com/'); 
+    
+        await page.locator('xpath=//*[@id="user-name"]').fill('standard_user');
+
+        await page.locator('xpath=//*[@id="password"]').fill('secret_sauce');
+
+        await page.locator('xpath=//*[@id="login-button"]').click();
+
+        await page.waitForLoadState('networkidle') 
+
+        // select an item
+        await page.locator('xpath=//*[@id="add-to-cart-sauce-labs-backpack"]').click();
+        await page.locator('xpath=//*[@id="add-to-cart-sauce-labs-bike-light"]').click();
+        await page.locator('xpath=//*[@id="add-to-cart-sauce-labs-bolt-t-shirt"]').click();
+
+        // Open cart
+        await page.locator('.shopping_cart_link').click();
+
+        // Click check out 
+        await page.locator('xpath=//*[@id="checkout"]').click();
+
+        // Enter checkout information
+        await page.locator('[data-test="firstName"]').fill('John');
+        await page.locator('[data-test="lastName"]').fill('Doe');
+        await page.locator('[data-test="postalCode"]').fill('12345');
+
+        // Click Continue
+        await page.locator('[data-test="continue"]').click();
+
+        // Capture item prices and item total
+        const itemPriceTexts = await page.locator('.inventory_item_price').allTextContents();
+
+        // Convert prices into numbers
+        const itemPrices = itemPriceTexts.map(price =>
+        parseFloat(price.replace('$', ''))
+        );
+
+        const calculatedItemTotal = itemPrices.reduce((sum, price) => sum + price, 0);
+        console.log('Calculated Total Item :', calculatedItemTotal);
 
 
 
-          });
+        });
 
-             test('Checkout with Empty Last Name', async ({page}: {page:Page}) => {  
-
-
-
-          });
-
+ 
 
 });
